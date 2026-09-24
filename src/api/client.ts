@@ -10,7 +10,7 @@ import type {
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
-function getAuthHeader(): string {
+function getAuthHeader(): string | undefined {
   try {
     const initData = window.Telegram?.WebApp?.initData
     if (initData) {
@@ -19,13 +19,22 @@ function getAuthHeader(): string {
   } catch {
     // not in Telegram
   }
-  return 'Bearer devsecret123'
+  // Local development against a backend running with DEV_MODE=true.
+  // import.meta.env.DEV is statically false in production builds, so this
+  // branch — and the token — are removed from the bundle.
+  if (import.meta.env.DEV) {
+    return 'Bearer devsecret123'
+  }
+  return undefined
 }
 
 const api = axios.create({ baseURL: BASE_URL })
 
 api.interceptors.request.use((config) => {
-  config.headers.Authorization = getAuthHeader()
+  const auth = getAuthHeader()
+  if (auth) {
+    config.headers.Authorization = auth
+  }
   return config
 })
 

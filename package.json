@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "postbuild": "if grep -rq devsecret dist; then echo 'ERROR: dev token found in the production bundle' >&2; exit 1; fi",
     "lint": "eslint .",
     "preview": "vite preview"
   },
