@@ -47,5 +47,24 @@ export const ru: Messages = {
   'error.loading': 'Ошибка загрузки данных',
 }
 
-// Filled in with the Polish translation; until then English is used.
-export const pl: Partial<Messages> = {}
+export const pl: Messages = {
+  'period.day': 'Dzień',
+  'period.week': 'Tydzień',
+  'period.month': 'Miesiąc',
+  'period.year': 'Rok',
+  'summary.expenses': 'Wydatki',
+  'summary.income': 'Przychody',
+  'summary.balance': 'Saldo',
+  'summary.transactions': 'Transakcje',
+  'chart.title': 'Wydatki dziennie',
+  'chart.spent': 'Wydano',
+  'categories.title': 'Według kategorii',
+  'currencies.title': '💱 Według waluty',
+  'budget.title': 'Budżet',
+  'stores.title': 'Top sklepy',
+  'stores.unknown': 'Nieznany',
+  'recent.title': 'Ostatnie transakcje',
+  'recent.noName': 'Bez nazwy',
+  'common.noData': 'Brak danych',
+  'error.loading': 'Nie udało się wczytać danych',
+}
