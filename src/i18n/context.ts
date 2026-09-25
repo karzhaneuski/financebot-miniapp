@@ -30,14 +30,12 @@ export function makeI18n(lang: Language): I18n {
   return {
     lang,
     t: (key) => catalog[key] ?? en[key],
+    // Number in the user's locale followed by the currency code
+    // ('1 234,50 PLN', '12,99 EUR') — the same shape as the bot's
+    // format_currency(), so both show identical amounts.
     formatMoney: (amount, currency, fractionDigits = 2) => {
       const digits = { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits }
-      try {
-        return new Intl.NumberFormat(locale, { style: 'currency', currency, ...digits }).format(amount)
-      } catch {
-        // Not an ISO 4217 code Intl knows (e.g. the legacy "BYR").
-        return `${new Intl.NumberFormat(locale, digits).format(amount)} ${currency}`
-      }
+      return `${new Intl.NumberFormat(locale, digits).format(amount)} ${currency}`
     },
     formatDate: (iso, options) => new Date(iso).toLocaleDateString(locale, options),
   }
