@@ -59,7 +59,7 @@ export const pl: Messages = {
   'chart.title': 'Wydatki dziennie',
   'chart.spent': 'Wydano',
   'categories.title': 'Według kategorii',
-  'currencies.title': '💱 Według waluty',
+  'currencies.title': '💱 Według walut',
   'budget.title': 'Budżet',
   'stores.title': 'Top sklepy',
   'stores.unknown': 'Nieznany',
