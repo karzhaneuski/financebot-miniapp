@@ -12,7 +12,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   transport: '🚗 Транспорт',
   electronics: '💻 Электроника',
   clothing: '👕 Одежда',
-  household: '🏠 Жильё',
+  household: '🏡 Дом/Быт',
   other: '📦 Прочее',
 }
 
