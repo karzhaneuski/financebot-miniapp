@@ -1,4 +1,5 @@
 import type { Transaction } from '../api/types'
+import { useI18n } from '../i18n/context'
 
 interface Props {
   data: Transaction[] | null
@@ -16,12 +17,8 @@ const CATEGORY_EMOJI: Record<string, string> = {
   other: '📦',
 }
 
-function formatDate(dateStr: string): string {
-  const d = new Date(dateStr)
-  return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })
-}
-
 export default function RecentTransactions({ data, loading }: Props) {
+  const { t, formatMoney, formatDate } = useI18n()
   console.log('transactions:', data)
 
   return (
@@ -35,11 +32,11 @@ export default function RecentTransactions({ data, loading }: Props) {
           marginBottom: 12,
         }}
       >
-        Последние операции
+        {t('recent.title')}
       </h2>
       {!loading && (!data || data.length === 0) ? (
         <p style={{ fontSize: 14, color: 'var(--tg-theme-hint-color, #999)', padding: '0 16px' }}>
-          Нет данных
+          {t('common.noData')}
         </p>
       ) : (
         <div
@@ -74,7 +71,7 @@ export default function RecentTransactions({ data, loading }: Props) {
               ))
             : (data ?? []).map((tx, i, arr) => {
                 const emoji = tx.emoji ?? CATEGORY_EMOJI[tx.category ?? ''] ?? '📦'
-                const label = tx.store || tx.source || 'Без названия'
+                const label = tx.store || tx.source || t('recent.noName')
                 const amount = tx.amount ?? 0
                 const date = tx.date ?? ''
                 const isForeign = !!tx.currency && tx.currency !== 'PLN'
@@ -117,11 +114,11 @@ export default function RecentTransactions({ data, loading }: Props) {
                           color: 'var(--tg-theme-text-color, #000)',
                         }}
                       >
-                        {primaryAmount.toFixed(2)} {primaryCurrency}
+                        {formatMoney(primaryAmount, primaryCurrency)}
                       </div>
                       <div style={{ fontSize: 11, color: 'var(--tg-theme-hint-color, #999)' }}>
-                        {isForeign ? `≈${amount.toFixed(2)} PLN · ` : ''}
-                        {date ? formatDate(date) : ''}
+                        {isForeign ? `≈${formatMoney(amount, 'PLN')} · ` : ''}
+                        {date ? formatDate(date, { day: 'numeric', month: 'short' }) : ''}
                       </div>
                     </div>
                   </div>

@@ -1,24 +1,15 @@
 import type { CategoryStats } from '../api/types'
+import { useI18n } from '../i18n/context'
 
 interface Props {
   data: CategoryStats | null
   loading: boolean
 }
 
-const CATEGORY_LABELS: Record<string, string> = {
-  groceries: '🛒 Продукты',
-  cafe: '☕ Кафе',
-  pharmacy: '💊 Аптека',
-  transport: '🚗 Транспорт',
-  electronics: '💻 Электроника',
-  clothing: '👕 Одежда',
-  household: '🏡 Дом/Быт',
-  other: '📦 Прочее',
-}
-
 const BAR_COLOR = 'var(--tg-theme-button-color, #2481cc)'
 
 export default function CategoryBreakdown({ data, loading }: Props) {
+  const { t, formatMoney } = useI18n()
   return (
     <div>
       <h2
@@ -30,7 +21,7 @@ export default function CategoryBreakdown({ data, loading }: Props) {
           marginBottom: 12,
         }}
       >
-        По категориям
+        {t('categories.title')}
       </h2>
       <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
         {loading ? (
@@ -41,10 +32,10 @@ export default function CategoryBreakdown({ data, loading }: Props) {
             </div>
           ))
         ) : !data || data.length === 0 ? (
-          <p style={{ fontSize: 14, color: 'var(--tg-theme-hint-color, #999)' }}>Нет данных</p>
+          <p style={{ fontSize: 14, color: 'var(--tg-theme-hint-color, #999)' }}>{t('common.noData')}</p>
         ) : (
           data.map((cat) => {
-            const label = cat.name ?? CATEGORY_LABELS[cat.category] ?? cat.category
+            const label = cat.name ?? cat.category
             const amount = cat.amount ?? 0
             const pct = cat.percentage ?? 0
             return (
@@ -60,7 +51,7 @@ export default function CategoryBreakdown({ data, loading }: Props) {
                     {cat.emoji ? `${cat.emoji} ` : ''}{label}
                   </span>
                   <span style={{ fontSize: 13, color: 'var(--tg-theme-hint-color, #999)' }}>
-                    {amount.toLocaleString('ru-RU', { maximumFractionDigits: 0 })} PLN &nbsp;
+                    {formatMoney(amount, 'PLN', 0)} &nbsp;
                     {pct.toFixed(0)}%
                   </span>
                 </div>

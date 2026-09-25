@@ -1,19 +1,9 @@
 import type { BudgetStats } from '../api/types'
+import { useI18n } from '../i18n/context'
 
 interface Props {
   data: BudgetStats | null
   loading: boolean
-}
-
-const CATEGORY_LABELS: Record<string, string> = {
-  groceries: '🛒 Продукты',
-  cafe: '☕ Кафе',
-  pharmacy: '💊 Аптека',
-  transport: '🚗 Транспорт',
-  electronics: '💻 Электроника',
-  clothing: '👕 Одежда',
-  household: '🏡 Дом/Быт',
-  other: '📦 Прочее',
 }
 
 function barColor(pct: number): string {
@@ -23,6 +13,7 @@ function barColor(pct: number): string {
 }
 
 export default function BudgetStatus({ data, loading }: Props) {
+  const { t, formatMoney } = useI18n()
   console.log('budgets:', data)
 
   if (!loading && (!data || data.length === 0)) return null
@@ -38,7 +29,7 @@ export default function BudgetStatus({ data, loading }: Props) {
           marginBottom: 12,
         }}
       >
-        Бюджет
+        {t('budget.title')}
       </h2>
       <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 14 }}>
         {loading
@@ -53,7 +44,7 @@ export default function BudgetStatus({ data, loading }: Props) {
               const limit = b.limit ?? 0
               const pct = Math.min(b.percentage ?? 0, 100)
               const color = barColor(b.percentage ?? 0)
-              const label = b.name ?? (b.emoji ? `${b.emoji} ` : '') + (CATEGORY_LABELS[b.category] ?? b.category)
+              const label = (b.emoji ? `${b.emoji} ` : '') + (b.name ?? b.category)
               return (
                 <div key={b.category}>
                   <div
@@ -67,7 +58,7 @@ export default function BudgetStatus({ data, loading }: Props) {
                       {label}
                     </span>
                     <span style={{ fontSize: 13, color: 'var(--tg-theme-hint-color, #999)' }}>
-                      {spent.toFixed(0)} / {limit.toFixed(0)} PLN &nbsp;
+                      {formatMoney(spent, 'PLN', 0)} / {formatMoney(limit, 'PLN', 0)} &nbsp;
                       <span style={{ color }}>{(b.percentage ?? 0).toFixed(0)}%</span>
                     </span>
                   </div>

@@ -7,6 +7,7 @@ import type {
   BudgetStats,
   Transaction,
   CurrencyStats,
+  Me,
 } from './types'
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
@@ -38,6 +39,11 @@ api.interceptors.request.use((config) => {
   }
   return config
 })
+
+export async function getMe(): Promise<Me> {
+  const { data } = await api.get('/api/me')
+  return data
+}
 
 export async function getSummary(period: string): Promise<Summary> {
   const { data } = await api.get('/api/stats/summary', { params: { period } })

@@ -1,16 +1,20 @@
+import { useI18n } from '../i18n/context'
+import type { MessageKey } from '../i18n/messages'
+
 interface Props {
   value: string
   onChange: (period: string) => void
 }
 
-const PERIODS = [
-  { key: 'day', label: 'День' },
-  { key: 'week', label: 'Неделя' },
-  { key: 'month', label: 'Месяц' },
-  { key: 'year', label: 'Год' },
+const PERIODS: { key: string; label: MessageKey }[] = [
+  { key: 'day', label: 'period.day' },
+  { key: 'week', label: 'period.week' },
+  { key: 'month', label: 'period.month' },
+  { key: 'year', label: 'period.year' },
 ]
 
 export default function PeriodSelector({ value, onChange }: Props) {
+  const { t } = useI18n()
   return (
     <div
       style={{
@@ -46,7 +50,7 @@ export default function PeriodSelector({ value, onChange }: Props) {
                 : 'var(--tg-theme-hint-color, #999999)',
           }}
         >
-          {p.label}
+          {t(p.label)}
         </button>
       ))}
     </div>

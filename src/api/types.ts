@@ -1,3 +1,8 @@
+export interface Me {
+  user_id: number
+  language: string
+}
+
 export interface Summary {
   total_spent: number
   total_income: number

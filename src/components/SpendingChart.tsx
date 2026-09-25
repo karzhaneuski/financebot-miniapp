@@ -7,6 +7,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import type { DayStats } from '../api/types'
+import { useI18n } from '../i18n/context'
 
 interface Props {
   data: DayStats | null
@@ -30,6 +31,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 }
 
 export default function SpendingChart({ data, loading }: Props) {
+  const { t, formatMoney, formatDate } = useI18n()
   console.log('days:', data)
 
   const buttonColor = getComputedStyle(document.documentElement)
@@ -38,13 +40,13 @@ export default function SpendingChart({ data, loading }: Props) {
 
   return (
     <div>
-      <SectionTitle>Расходы по дням</SectionTitle>
+      <SectionTitle>{t('chart.title')}</SectionTitle>
       <div style={{ padding: '0 8px' }}>
         {loading ? (
           <div className="skeleton" style={{ height: 180, borderRadius: 12 }} />
         ) : !data || data.length === 0 ? (
           <p style={{ fontSize: 14, color: 'var(--tg-theme-hint-color, #999)', padding: '0 8px' }}>
-            Нет данных
+            {t('common.noData')}
           </p>
         ) : (
           <ResponsiveContainer width="100%" height={180}>
@@ -80,11 +82,8 @@ export default function SpendingChart({ data, loading }: Props) {
                   fontSize: 13,
                   color: 'var(--tg-theme-text-color, #000)',
                 }}
-                formatter={(value) => [`${Number(value ?? 0).toFixed(2)} PLN`, 'Расходы']}
-                labelFormatter={(label) => {
-                  const d = new Date(String(label))
-                  return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })
-                }}
+                formatter={(value) => [formatMoney(Number(value ?? 0), 'PLN'), t('chart.spent')]}
+                labelFormatter={(label) => formatDate(String(label), { day: 'numeric', month: 'short' })}
               />
               <Area
                 type="monotone"

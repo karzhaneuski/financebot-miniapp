@@ -17,6 +17,7 @@ import type {
   Transaction,
   CurrencyStats,
 } from '../api/types'
+import { useI18n } from '../i18n/context'
 
 interface DashboardData {
   summary: Summary | null
@@ -29,6 +30,7 @@ interface DashboardData {
 }
 
 export function useDashboard(period: string) {
+  const { t } = useI18n()
   const [data, setData] = useState<DashboardData>({
     summary: null,
     categories: null,
@@ -56,11 +58,11 @@ export function useDashboard(period: string) {
       ])
       setData({ summary, categories, days, stores, budgets, transactions, currencies })
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Ошибка загрузки данных')
+      setError(e instanceof Error ? e.message : t('error.loading'))
     } finally {
       setLoading(false)
     }
-  }, [period])
+  }, [period, t])
 
   useEffect(() => {
     fetch()

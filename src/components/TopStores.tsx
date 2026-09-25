@@ -1,4 +1,5 @@
 import type { StoreStats } from '../api/types'
+import { useI18n } from '../i18n/context'
 
 interface Props {
   data: StoreStats | null
@@ -6,6 +7,7 @@ interface Props {
 }
 
 export default function TopStores({ data, loading }: Props) {
+  const { t, formatMoney } = useI18n()
   console.log('stores:', data)
 
   return (
@@ -19,11 +21,11 @@ export default function TopStores({ data, loading }: Props) {
           marginBottom: 12,
         }}
       >
-        Топ магазинов
+        {t('stores.title')}
       </h2>
       {!loading && (!data || data.length === 0) ? (
         <p style={{ fontSize: 14, color: 'var(--tg-theme-hint-color, #999)', padding: '0 16px' }}>
-          Нет данных
+          {t('common.noData')}
         </p>
       ) : (
         <div
@@ -76,7 +78,7 @@ export default function TopStores({ data, loading }: Props) {
                       {i + 1}
                     </span>
                     <span style={{ fontSize: 14, color: 'var(--tg-theme-text-color, #000)' }}>
-                      {store.store || 'Неизвестно'}
+                      {store.store || t('stores.unknown')}
                     </span>
                   </div>
                   <span
@@ -86,7 +88,7 @@ export default function TopStores({ data, loading }: Props) {
                       color: 'var(--tg-theme-text-color, #000)',
                     }}
                   >
-                    {(store.amount ?? 0).toLocaleString('ru-RU', { maximumFractionDigits: 0 })} PLN
+                    {formatMoney(store.amount ?? 0, 'PLN', 0)}
                   </span>
                 </div>
               ))}

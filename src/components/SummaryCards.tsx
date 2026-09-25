@@ -1,12 +1,9 @@
 import type { Summary } from '../api/types'
+import { useI18n } from '../i18n/context'
 
 interface Props {
   data: Summary | null
   loading: boolean
-}
-
-function formatAmount(n: number): string {
-  return n.toLocaleString('ru-RU', { maximumFractionDigits: 0 })
 }
 
 function Card({
@@ -58,6 +55,7 @@ function Card({
 }
 
 export default function SummaryCards({ data, loading }: Props) {
+  const { t, formatMoney } = useI18n()
   console.log('summary:', data)
 
   const balance = data?.balance ?? 0
@@ -73,26 +71,26 @@ export default function SummaryCards({ data, loading }: Props) {
     >
       <Card
         emoji="💸"
-        label="Расходы"
-        value={`${formatAmount(data?.total_spent ?? 0)} PLN`}
+        label={t('summary.expenses')}
+        value={formatMoney(data?.total_spent ?? 0, 'PLN', 0)}
         loading={loading}
       />
       <Card
         emoji="💰"
-        label="Доходы"
-        value={`${formatAmount(data?.total_income ?? 0)} PLN`}
+        label={t('summary.income')}
+        value={formatMoney(data?.total_income ?? 0, 'PLN', 0)}
         loading={loading}
       />
       <Card
         emoji="📊"
-        label="Баланс"
-        value={`${balance >= 0 ? '+' : ''}${formatAmount(balance)} PLN`}
+        label={t('summary.balance')}
+        value={`${balance >= 0 ? '+' : ''}${formatMoney(balance, 'PLN', 0)}`}
         loading={loading}
         highlight={balance >= 0 ? 'green' : 'red'}
       />
       <Card
         emoji="🧾"
-        label="Транзакций"
+        label={t('summary.transactions')}
         value={String(data?.transaction_count ?? 0)}
         loading={loading}
       />

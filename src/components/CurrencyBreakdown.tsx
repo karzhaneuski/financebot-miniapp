@@ -1,4 +1,5 @@
 import type { CurrencyStats } from '../api/types'
+import { useI18n } from '../i18n/context'
 
 interface Props {
   data: CurrencyStats | null
@@ -17,6 +18,7 @@ const CURRENCY_FLAGS: Record<string, string> = {
 }
 
 export default function CurrencyBreakdown({ data, loading }: Props) {
+  const { t, formatMoney } = useI18n()
   if (!loading && (!data || data.length < 2)) return null
 
   return (
@@ -30,7 +32,7 @@ export default function CurrencyBreakdown({ data, loading }: Props) {
           marginBottom: 12,
         }}
       >
-        💱 По валютам
+        {t('currencies.title')}
       </h2>
       <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
         {loading
@@ -50,9 +52,8 @@ export default function CurrencyBreakdown({ data, loading }: Props) {
                     {flag} {c.currency}
                   </span>
                   <span style={{ color: 'var(--tg-theme-hint-color, #999)' }}>
-                    {original.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    {c.currency !== 'PLN' &&
-                      ` (≈${pln.toLocaleString('ru-RU', { maximumFractionDigits: 0 })} PLN)`}
+                    {formatMoney(original, c.currency)}
+                    {c.currency !== 'PLN' && ` (≈${formatMoney(pln, 'PLN', 0)})`}
                   </span>
                 </div>
               )
