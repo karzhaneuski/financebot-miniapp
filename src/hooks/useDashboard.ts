@@ -6,6 +6,7 @@ import {
   getTopStores,
   getBudgets,
   getRecentTransactions,
+  getByCurrency,
 } from '../api/client'
 import type {
   Summary,
@@ -14,6 +15,7 @@ import type {
   StoreStats,
   BudgetStats,
   Transaction,
+  CurrencyStats,
 } from '../api/types'
 
 interface DashboardData {
@@ -23,6 +25,7 @@ interface DashboardData {
   stores: StoreStats | null
   budgets: BudgetStats | null
   transactions: Transaction[] | null
+  currencies: CurrencyStats | null
 }
 
 export function useDashboard(period: string) {
@@ -33,6 +36,7 @@ export function useDashboard(period: string) {
     stores: null,
     budgets: null,
     transactions: null,
+    currencies: null,
   })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -41,15 +45,16 @@ export function useDashboard(period: string) {
     setLoading(true)
     setError(null)
     try {
-      const [summary, categories, days, stores, budgets, transactions] = await Promise.all([
+      const [summary, categories, days, stores, budgets, transactions, currencies] = await Promise.all([
         getSummary(period),
         getByCategory(period),
         getByDay(period),
         getTopStores(period),
         getBudgets(),
         getRecentTransactions(10),
+        getByCurrency(period),
       ])
-      setData({ summary, categories, days, stores, budgets, transactions })
+      setData({ summary, categories, days, stores, budgets, transactions, currencies })
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Ошибка загрузки данных')
     } finally {

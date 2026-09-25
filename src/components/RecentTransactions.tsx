@@ -77,6 +77,9 @@ export default function RecentTransactions({ data, loading }: Props) {
                 const label = tx.store || tx.source || 'Без названия'
                 const amount = tx.amount ?? 0
                 const date = tx.date ?? ''
+                const isForeign = !!tx.currency && tx.currency !== 'PLN'
+                const primaryAmount = isForeign ? tx.original_amount ?? amount : amount
+                const primaryCurrency = isForeign ? tx.currency : 'PLN'
                 return (
                   <div
                     key={tx.id ?? i}
@@ -114,9 +117,10 @@ export default function RecentTransactions({ data, loading }: Props) {
                           color: 'var(--tg-theme-text-color, #000)',
                         }}
                       >
-                        {amount.toFixed(2)} PLN
+                        {primaryAmount.toFixed(2)} {primaryCurrency}
                       </div>
                       <div style={{ fontSize: 11, color: 'var(--tg-theme-hint-color, #999)' }}>
+                        {isForeign ? `≈${amount.toFixed(2)} PLN · ` : ''}
                         {date ? formatDate(date) : ''}
                       </div>
                     </div>

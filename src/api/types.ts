@@ -49,8 +49,18 @@ export interface Transaction {
   date: string
   amount: number
   currency: string
+  original_amount?: number
   category: string
   category_name?: string
   emoji?: string
   source?: string | null
 }
+
+export interface CurrencyStat {
+  currency: string
+  total_original: number
+  total_pln: number
+  count: number
+}
+
+export type CurrencyStats = CurrencyStat[]

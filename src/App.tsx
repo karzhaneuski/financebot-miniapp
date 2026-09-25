@@ -3,6 +3,7 @@ import PeriodSelector from './components/PeriodSelector'
 import SummaryCards from './components/SummaryCards'
 import SpendingChart from './components/SpendingChart'
 import CategoryBreakdown from './components/CategoryBreakdown'
+import CurrencyBreakdown from './components/CurrencyBreakdown'
 import BudgetStatus from './components/BudgetStatus'
 import TopStores from './components/TopStores'
 import RecentTransactions from './components/RecentTransactions'
@@ -41,6 +42,7 @@ export default function App() {
         <SummaryCards data={data.summary} loading={loading} />
         <SpendingChart data={data.days} loading={loading} />
         <CategoryBreakdown data={data.categories} loading={loading} />
+        <CurrencyBreakdown data={data.currencies} loading={loading} />
         <BudgetStatus data={data.budgets} loading={loading} />
         <TopStores data={data.stores} loading={loading} />
         <RecentTransactions data={data.transactions} loading={loading} />

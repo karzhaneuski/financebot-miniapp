@@ -6,6 +6,7 @@ import type {
   StoreStats,
   BudgetStats,
   Transaction,
+  CurrencyStats,
 } from './types'
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
@@ -66,4 +67,9 @@ export async function getBudgets(): Promise<BudgetStats> {
 export async function getRecentTransactions(limit: number): Promise<Transaction[]> {
   const { data } = await api.get('/api/transactions/recent', { params: { limit } })
   return data.transactions ?? []
+}
+
+export async function getByCurrency(period: string): Promise<CurrencyStats> {
+  const { data } = await api.get('/api/stats/by-currency', { params: { period } })
+  return data.currencies ?? []
 }
